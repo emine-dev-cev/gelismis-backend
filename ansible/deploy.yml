@@ -1,0 +1,53 @@
+---
+- name: Deploy Advanced Flask Backend
+  hosts: web
+  become: yes
+  vars:
+    docker_image: "yourdockerhub/advanced-flask-backend:latest"
+    container_name: "flask-backend"
+    app_port: 5000
+
+  tasks:
+    - name: Install dependencies
+      apt:
+        name: 
+          - docker.io
+          - python3-pip
+        state: present
+        update_cache: yes
+
+    - name: Ensure Docker service is running
+      service:
+        name: docker
+        state: started
+        enabled: yes
+
+    - name: Log into Docker Hub
+      docker_login:
+        username: "{{ docker_hub_user }}"
+        password: "{{ docker_hub_password }}"
+      when: docker_hub_user is defined
+
+    - name: Pull latest image
+      docker_image:
+        name: "{{ docker_image }}"
+        source: pull
+
+    - name: Stop and remove existing container
+      docker_container:
+        name: "{{ container_name }}"
+        state: absent
+
+    - name: Run new container
+      docker_container:
+        name: "{{ container_name }}"
+        image: "{{ docker_image }}"
+        state: started
+        restart_policy: always
+        published_ports:
+          - "80:{{ app_port }}"
+        env:
+          FLASK_CONFIG: "prod"
+          SECRET_KEY: "{{ secret_key }}"
+          JWT_SECRET_KEY: "{{ jwt_secret_key }}"
+          DATABASE_URL: "{{ database_url }}"
