@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NexNet | Modern Social Hub</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+    <nav>
+        <div class="nav-content">
+            <div class="logo">NexNet</div>
+            <div class="search-bar">
+                <input type="text" id="search-input" placeholder="Search posts..." onkeyup="searchPosts(event)">
+            </div>
+            <div id="nav-user" class="hidden">
+                <span id="welcome-msg" style="margin-right: 1rem; color: var(--text-dim)"></span>
+                <button class="btn" style="color: var(--text-dim)" onclick="logout()">Logout</button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container main-layout">
+        <!-- Sidebar -->
+        <aside id="sidebar" class="hidden">
+            <div class="card profile-card">
+                <div class="avatar-large"></div>
+                <h3 id="profile-name">@username</h3>
+                <div class="stats">
+                    <div class="stat-item">
+                        <span id="follower-count">0</span>
+                        <label>Followers</label>
+                    </div>
+                    <div class="stat-item">
+                        <span id="following-count">0</span>
+                        <label>Following</label>
+                    </div>
+                </div>
+            </div>
+            <div class="card suggest-card">
+                <h4>Suggested Users</h4>
+                <div id="user-suggestions">
+                    <!-- Suggested users will be listed here -->
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main>
+            <!-- Auth Section -->
+            <div id="auth-section" class="card">
+                <h2 id="auth-title">Welcome to the Future</h2>
+                <!-- ... forms remain same ... -->
+            <div id="login-form">
+                <input type="text" id="login-username" placeholder="Username">
+                <input type="password" id="login-password" placeholder="Password">
+                <button class="btn btn-primary" style="width: 100%" onclick="login()">Login</button>
+                <p style="margin-top: 1rem; text-align: center; color: var(--text-dim);">
+                    Don't have an account? <a href="#" onclick="toggleAuth(false)" style="color: var(--primary)">Register</a>
+                </p>
+            </div>
+            <div id="register-form" class="hidden">
+                <input type="text" id="reg-username" placeholder="Choose Username">
+                <input type="email" id="reg-email" placeholder="Email Address">
+                <input type="password" id="reg-password" placeholder="Password (min. 6 characters)">
+                <button class="btn btn-primary" style="width: 100%" onclick="register()">Create Account</button>
+                <p style="margin-top: 1rem; text-align: center; color: var(--text-dim);">
+                    Already a member? <a href="#" onclick="toggleAuth(true)" style="color: var(--primary)">Login</a>
+                </p>
+            </div>
+        </div>
+
+        <!-- Feed Section -->
+        <div id="feed-section" class="hidden">
+            <div class="card" id="create-post-card">
+                <input type="text" id="post-title" placeholder="Post Title">
+                <textarea id="post-content" placeholder="What's on your mind?" rows="3"></textarea>
+                <button class="btn btn-primary" onclick="createPost()">Share to Feed</button>
+            </div>
+
+            <div id="posts-container">
+                <!-- Posts will be injected here -->
+            </div>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>

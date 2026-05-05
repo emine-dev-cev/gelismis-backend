@@ -38,10 +38,12 @@ def create_app(config_name='dev'):
     from .routes.user import user_bp
     from .routes.main import main_bp
     from .routes.post import post_bp
+    from .routes.api_pro import api_pro_bp
     
     app.register_blueprint(auth_bp, url_prefix='/api/auth')
     app.register_blueprint(user_bp, url_prefix='/api/users')
     app.register_blueprint(post_bp, url_prefix='/api/posts')
+    app.register_blueprint(api_pro_bp)
     app.register_blueprint(main_bp)
 
     return app

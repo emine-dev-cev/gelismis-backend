@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NexNet Elite | Premium Social Network</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        elite: {
+                            bg: '#FAF9F6',
+                            card: '#FFFFFF',
+                            border: '#F1F5F9',
+                            text: '#1E293B',
+                            muted: '#64748B'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- Google Fonts - Inter for Professional Look -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- Icons & Animations -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="https://unpkg.com/framer-motion@10.16.4/dist/framer-motion.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    
+    <style>
+        body { 
+            font-family: 'Inter', sans-serif; 
+            background-color: #FAF9F6;
+            color: #1E293B;
+            -webkit-font-smoothing: antialiased;
+        }
+        
+        .elite-card {
+            background: white;
+            border: 1px solid #F1F5F9;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.02), 0 2px 4px -1px rgba(0, 0, 0, 0.01);
+            transition: all 0.3s ease;
+        }
+        
+        .elite-card:hover {
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.04);
+            border-color: #E2E8F0;
+        }
+
+        .skeleton {
+            background: linear-gradient(90deg, #F1F5F9 25%, #F8FAFC 50%, #F1F5F9 75%);
+            background-size: 200% 100%;
+            animation: skeleton-loading 1.5s infinite;
+        }
+
+        @keyframes skeleton-loading {
+            0% { background-position: 200% 0; }
+            100% { background-position: -200% 0; }
+        }
+
+        /* Smooth Scroll */
+        html { scroll-behavior: smooth; }
+        .custom-scroll::-webkit-scrollbar { width: 6px; }
+        .custom-scroll::-webkit-scrollbar-track { background: transparent; }
+        .custom-scroll::-webkit-scrollbar-thumb { background: #E2E8F0; border-radius: 10px; }
+        
+        /* Image Blur Overlay */
+        .img-overlay {
+            position: absolute;
+            inset: 0;
+            background: rgba(0,0,0,0.1);
+            backdrop-filter: blur(2px);
+        }
+    </style>
+</head>
+<body class="bg-elite-bg selection:bg-indigo-100 selection:text-indigo-900">
+    <div id="app"></div>
+
+    <script type="module" src="src/app.js"></script>
+</body>
+</html>

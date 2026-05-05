@@ -1,6 +1,8 @@
 from flask import Blueprint, request, jsonify
+from flask_jwt_extended import jwt_required, get_jwt_identity
 from ..services.user_service import UserService
 from ..schemas.user_schema import user_schema, login_schema
+from ..models.user import User
 from marshmallow import ValidationError
 
 auth_bp = Blueprint('auth', __name__)
@@ -47,3 +49,12 @@ def login():
         }), 200
         
     return jsonify(result), status
+
+@auth_bp.route('/me', methods=['GET'])
+@jwt_required()
+def get_me():
+    user_id = get_jwt_identity()
+    user = User.query.get(user_id)
+    if not user:
+        return jsonify({"message": "User not found"}), 404
+    return jsonify(user_schema.dump(user)), 200
