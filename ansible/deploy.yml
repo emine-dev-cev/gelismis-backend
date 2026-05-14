@@ -3,7 +3,8 @@
   hosts: web
   become: yes
   vars:
-    docker_image: "yourdockerhub/advanced-flask-backend:latest"
+    ansible_ssh_common_args: '-o StrictHostKeyChecking=no'
+    docker_image: "{{ docker_hub_user }}/advanced-flask-backend:latest"
     container_name: "flask-backend"
     app_port: 5000
 
