@@ -3,11 +3,12 @@ from .. import db
 
 class PostService:
     @staticmethod
-    def create_post(data, user_id):
+    def create_post(data, user_id, image_url=None):
         post = Post(
             title=data['title'],
             content=data['content'],
-            user_id=user_id
+            user_id=user_id,
+            image_url=image_url
         )
         db.session.add(post)
         db.session.commit()

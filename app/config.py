@@ -12,6 +12,12 @@ class Config:
     JWT_ACCESS_TOKEN_EXPIRES = timedelta(hours=1)
     DEBUG = False
     TESTING = False
+    
+    # Alibaba Cloud OSS Settings
+    OSS_ACCESS_KEY_ID = os.environ.get('OSS_ACCESS_KEY_ID')
+    OSS_ACCESS_KEY_SECRET = os.environ.get('OSS_ACCESS_KEY_SECRET')
+    OSS_BUCKET_NAME = os.environ.get('OSS_BUCKET_NAME')
+    OSS_ENDPOINT = os.environ.get('OSS_ENDPOINT')
 
 class DevelopmentConfig(Config):
     DEBUG = True

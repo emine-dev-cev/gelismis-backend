@@ -1,6 +1,7 @@
 from flask import Blueprint, request, jsonify
 from flask_jwt_extended import jwt_required, get_jwt_identity
 from ..services.post_service import PostService
+from ..services.oss_service import OSSService
 from ..schemas.post_schema import post_schema, posts_schema
 from marshmallow import ValidationError
 
@@ -32,14 +33,28 @@ def create_post():
       201:
         description: Post created successfully
     """
-    json_data = request.get_json()
+    if request.is_json:
+        json_data = request.get_json()
+    else:
+        json_data = request.form.to_dict()
+
     try:
         data = post_schema.load(json_data)
     except ValidationError as err:
         return jsonify(err.messages), 400
         
     user_id = get_jwt_identity()
-    post = PostService.create_post(data, user_id)
+    
+    # Handle Image Upload
+    image_url = None
+    if 'image' in request.files:
+        image_file = request.files['image']
+        try:
+            image_url = OSSService.upload_file(image_file)
+        except Exception as e:
+            return jsonify({"error": f"Image upload failed: {str(e)}"}), 500
+            
+    post = PostService.create_post(data, user_id, image_url=image_url)
     
     return jsonify(post_schema.dump(post)), 201
 

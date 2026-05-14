@@ -26,7 +26,10 @@ api.interceptors.response.use(
 
 export const PostService = {
     getAll: () => api.get('/posts/'),
-    create: (data) => api.post('/posts/', data),
+    create: (data) => {
+        const config = data instanceof FormData ? { headers: { 'Content-Type': 'multipart/form-data' } } : {};
+        return api.post('/posts/', data, config);
+    },
     like: (id) => api.post(`/posts/${id}/like`),
     comment: (id, text) => api.post(`/posts/${id}/comment`, { text })
 };

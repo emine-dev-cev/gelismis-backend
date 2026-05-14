@@ -84,6 +84,8 @@ const LoginPage = () => {
 const FeedPage = () => {
     const { posts, setPosts, addPost, loading, setLoading } = useStore();
     const [newPost, setNewPost] = useState({ title: '', content: '' });
+    const [image, setImage] = useState(null);
+    const [preview, setPreview] = useState(null);
 
     useEffect(() => {
         const fetch = async () => {
@@ -96,17 +98,50 @@ const FeedPage = () => {
 
     const handleCreate = async (e) => {
         e.preventDefault();
-        const res = await PostService.create(newPost);
-        addPost(res.data);
-        setNewPost({ title: '', content: '' });
+        
+        const formData = new FormData();
+        formData.append('title', newPost.title);
+        formData.append('content', newPost.content);
+        if (image) formData.append('image', image);
+
+        try {
+            const res = await PostService.create(formData);
+            addPost(res.data);
+            setNewPost({ title: '', content: '' });
+            setImage(null);
+            setPreview(null);
+        } catch (err) {
+            console.error(err);
+            alert('Paylaşım yapılamadı!');
+        }
+    };
+
+    const handleFileChange = (e) => {
+        const file = e.target.files[0];
+        if (file) {
+            setImage(file);
+            setPreview(URL.createObjectURL(file));
+        }
     };
 
     return html`
         <div class="pt-20 pb-12 max-w-screen-md mx-auto px-4">
             <form class="card p-5 mb-8" onSubmit=${handleCreate}>
-                <input class="input-field mb-3" placeholder="Başlık..." value=${newPost.title} onChange=${e => setNewPost({...newPost, title: e.target.value})} />
-                <textarea class="input-field mb-4 h-24" placeholder="Ne düşünüyorsun?" value=${newPost.content} onChange=${e => setNewPost({...newPost, content: e.target.value})}></textarea>
-                <button class="btn-primary px-8 py-2" type="submit">Paylaş</button>
+                <input class="input-field mb-3" placeholder="Başlık..." value=${newPost.title} onChange=${e => setNewPost({...newPost, title: e.target.value})} required />
+                <textarea class="input-field mb-4 h-24" placeholder="Ne düşünüyorsun?" value=${newPost.content} onChange=${e => setNewPost({...newPost, content: e.target.value})} required></textarea>
+                
+                ${preview && html`<img src="${preview}" class="w-full h-48 object-cover rounded-lg mb-4" />`}
+                
+                <div class="flex items-center justify-between">
+                    <label class="flex items-center gap-2 text-sm font-semibold text-blue-600 cursor-pointer hover:text-blue-700">
+                        <input type="file" class="hidden" accept="image/*" onChange=${handleFileChange} />
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                            <path fill-rule="evenodd" d="M4 3a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V5a2 2 0 00-2-2H4zm12 12H4l4-8 3 6 2-4 3 6z" clip-rule="evenodd" />
+                        </svg>
+                        Resim Ekle
+                    </label>
+                    <button class="btn-primary px-8 py-2" type="submit">Paylaş</button>
+                </div>
             </form>
             <div>
                 ${loading ? html`<div class="text-center py-10 text-slate-400">Yükleniyor...</div>` : posts.map(p => html`<${PostCard} key=${p.id} post=${p} />`)}
